@@ -3,12 +3,39 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-
+const connectionString = process.env.MONGO_CON
+  mongoose = require('mongoose');
+  mongoose.connect(connectionString,
+    { useNewUrlParser: true, useUnifiedTopology: true });
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
-var vehicleRouter=require('./routes/vehicles')
-var starsRouter=require('./routes/stars')
-var slotRouter=require('./routes/slot')
+var vehicleRouter = require('./routes/vehicles')
+var starsRouter = require('./routes/stars')
+var slotRouter = require('./routes/slot')
+var resourceRouter=require('./routes/resource')
+var vehicle = require("./models/vehicles");
+// We can seed the collection if needed on server start
+async function recreateDB(){
+  // Delete everything
+  await vehicle.deleteMany();
+  let instance1 = new vehicle({vehicleName:"car",wheels:"four",color:"red",price:300});
+  instance1.save( function(err,doc) {
+  if(err) return console.error(err);
+  console.log("First object saved")
+  });
+  let instance2 = new vehicle({vehicleName:"Bike",wheels:"two",color:"green",price:500});
+  instance2.save( function(err,doc) {
+  if(err) return console.error(err);
+  console.log("Second object saved")
+  });
+  let instance3 = new vehicle({vehicleName:"Bus",wheels:"four",color:"yellow",price:1000});
+  instance3.save( function(err,doc) {
+  if(err) return console.error(err);
+  console.log("Third object saved")
+  });
+  }
+  let reseed = true;
+  if (reseed) { recreateDB();}
 
 var app = express();
 
@@ -24,24 +51,31 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
-app.use('/vehicles',vehicleRouter)
+app.use('/vehicles', vehicleRouter)
 app.use('/stars', starsRouter);
-app.use('/slot',slotRouter);
+app.use('/slot', slotRouter);
+app.use('/resource',resourceRouter)
 
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
   next(createError(404));
 });
 
 // error handler
-app.use(function(err, req, res, next) {
+app.use(function (err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
-
+  
   // render the error page
   res.status(err.status || 500);
   res.render('error');
 });
-
+//Get the default connection
+var db = mongoose.connection;
+//Bind connection to error event
+db.on('error', console.error.bind(console, 'MongoDB connectionerror:'));
+db.once("open", function(){
+console.log("Connection to DB succeeded")
+});
 module.exports = app;

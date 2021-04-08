@@ -2,14 +2,14 @@ extends layout
 
 block content
   h1= title
-  - let vehicles=[{vehicleName:"car",wheels:"four",color:"red",price:300},{vehicleName:"Bike",wheels:"two",color:"green",price:500},{vehicleName:"Bus",wheels:"four",color:"yellow",price:1000}]
+  - let vehicles=results
   div(class="container-fluid mt-3")
   div(class="row")
     each vehicle,index in vehicles
-        div(class="col-sm-4 bg-info m-1 p-3" onclick=`buy(${index})`) #{vehicle.vehicleName} - #{vehicle.wheels} - #{vehicle.color} - #{vehicle.price}
+        div(class="col-sm-4 bg-info m-1 p-3" style=("font-weight:bolder")  onclick=`buy(${index})`) #{vehicle.vehiclename} - #{vehicle.wheels} - #{vehicle.color} - #{vehicle.price}
   script.
      
-    function buy(itemNo)
-    {
+      function buy(itemNo)
+      {
         alert(`You purchased Item ${itemNo+1}`)
-    }
+      }
