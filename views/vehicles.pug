@@ -1,15 +1,21 @@
 extends layout
-
+ 
 block content
   h1= title
-  - let vehicles=results
+  - let vehicles= results
   div(class="container-fluid mt-3")
-  div(class="row")
-    each vehicle,index in vehicles
-        div(class="col-sm-4 bg-info m-1 p-3" style=("font-weight:bolder")  onclick=`buy(${index})`) #{vehicle.vehiclename} - #{vehicle.wheels} - #{vehicle.color} - #{vehicle.price}
+  div(class="row m-1")
+    each i,index in vehicles
+      - let destination = `dispatch(\"/vehicles/update?id=${i._id}\")`
+      div(class="col-sm-4  m-1" style=("font-weight:bolder")) #{i.vehiclename} - #{i.wheels} - #{i.color} - #{i.price}
+        button.btn(class="btn-primary ml-1", onclick= destination) Update
+  
   script.
-     
       function buy(itemNo)
       {
         alert(`You purchased Item ${itemNo+1}`)
+      }
+      function dispatch(path)
+      {
+        window.location.href=path
       }

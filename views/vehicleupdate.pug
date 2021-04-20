@@ -1,0 +1,49 @@
+extends layout
+
+block content
+  h1= title
+
+  - let vehicleid = toShow._id
+  - let vehiclename = toShow.vehiclename
+  - let wheels = toShow.wheels
+  - let color = toShow.color
+  - let price = toShow.price
+
+  
+  div.row(class='mb-2')
+    div.mr-1 ID is
+    div #{vehicleid}
+  - let actionid = "/resource/vehicles/" + vehicleid
+  form(id='VehicleForm', action= actionid, method="PUT")
+    div.form-group
+        label.vehicleAttr(for='vehiclename') Vehicle name
+        input#costumetype(type='text', name='vehiclename', value= vehiclename )
+    div.form-group
+        label.vehicleAttr(for='wheels') vehicle wheels
+        input#size(type='text', name='wheels', value= wheels )
+    div.form-group
+        label.vehicleAttr(for='color') Vehicle color
+        input#cost(type='text', name='color', value= color )
+    div.form-group
+        label.vehicleAttr(for='price') Vehicle price
+        input#cost(type='number', name='price', value= price )
+    input(type="submit")
+
+  script.
+    document.forms['VehicleForm'].addEventListener('submit', (event) => {
+      event.preventDefault();
+      // TODO do something here to show user that form is being submitted
+      fetch(event.target.action, {
+        method: 'PUT',
+        body: new URLSearchParams(new FormData(event.target)) // event.target is the form
+      }).then((resp) => {
+        return resp.json(); // or resp.text() or whatever the server sends
+      }).then((body) => {
+        alert("Update succeded")
+        // TODO handle body
+      }).catch((error) => {
+        // TODO handle error
+        alert("Update failed " + error )
+      });
+    });
+
