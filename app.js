@@ -33,12 +33,12 @@ var vehicle = require("./models/vehicles");
 async function recreateDB(){
   // Delete everything
   await vehicle.deleteMany();
-  let instance1 = new vehicle({vehiclename:"car",wheels:"four",color:"red",price:300});
+  let instance1 = new vehicle({vehiclename:"car",wheels:"four",color:"red",price:800});
   instance1.save( function(err,doc) {
     if(err) return console.error(err);
     console.log("First object saved")
   });
-  let instance2 = new vehicle({vehiclename:"Bike",wheels:"two",color:"green",price:500});
+  let instance2 = new vehicle({vehiclename:"Bike",wheels:"two",color:"green",price:900});
   instance2.save( function(err,doc) {
     if(err) return console.error(err);
     console.log("Second object saved")

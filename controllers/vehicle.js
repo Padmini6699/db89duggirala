@@ -40,7 +40,7 @@ exports.vehicle_create_post = async function (req, res) {
         res.send(result);
     }
     catch (err) {
-        res.send(`{"error": ${err}}`)
+        res.send(err)
         res.status(500);
     }
 };
